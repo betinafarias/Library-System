@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Library System</title>
+  	<!--Import Google Icon Font-->
+     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <!--Import materialize.css-->
+     <link type="text/css" rel="stylesheet" href="materialize.css"  media="screen,projection"/>
+
+     <!--Let browser know website is optimized for mobile-->
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+<body>
+
+	<!-- Dropdown Structure -->
+	<ul id="dropdown1" class="dropdown-content">
+	  <li><a href="#!">one</a></li>
+	  <li><a href="#!">two</a></li>
+	  <li class="divider"></li>
+	  <li><a href="#!">three</a></li>
+	</ul>
+	<nav>
+	  <div class="nav-wrapper light-blue">
+	    <a href="#!" class="brand-logo">Library System</a>
+	    <ul class="right hide-on-med-and-down light-blue">
+	      <li class="active"><a href="index.html">Loans</a></li>
+	      <li><a href="books.html">Books</a></li>
+	      <li><a href="categories.html">Categories</a></li>
+	      <li><a href="students.html">Students</a></li>
+	      <li><a href="employees.html">Employees</a></li>
+	      <li><a href="library.html">Library</a></li>
+	     
+	    </ul>
+	  </div>
+	</nav>
+	
+	
+
+   <!--Import jQuery before materialize.js-->
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="js/materialize.min.js"></script>
+	<script>
+	  $(document).ready(function(){
+		    $('ul.tabs').tabs();
+		  });
+	</script>
+</body>
+</html>
+
+
