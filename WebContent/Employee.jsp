@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
-<%@ page import="br.com.fadergs.webii.entidades.Category" %>
+<%@ page import="br.com.fadergs.webii.entidades.Employee" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -35,9 +35,9 @@
 	    <ul class="right hide-on-med-and-down light-blue">
 	      <li><a href="LoanController">Loans</a></li>
 	      <li ><a href="BookController">Books</a></li>
-	      <li class="active"><a href="CategoryController">Categories</a></li>
+	      <li ><a href="CategoryController">Categories</a></li>
 	      <li><a href="StudentController">Students</a></li>
-	      <li><a href="EmployeeController">Employees</a></li>
+	      <li class="active"><a href="EmployeeController">Employees</a></li>
 	      <li><a href="LibraryController">Library</a></li>
 	    </ul>
 	  </div>
@@ -47,20 +47,24 @@
 	
 	<div class="container">
 	  <div class="row center">
-		<h4>Categories</h4>
+		<h4>Employee</h4>
 		
 <br>
   <ul class="collapsible" data-collapsible="accordion">
     <li>
-      <div class="collapsible-header purple white-text active"><i class="material-icons">add</i>Criar/editar categoria</div>
+      <div class="collapsible-header purple white-text active"><i class="material-icons">add</i>Create/edit employee</div>
       <div class="collapsible-body"><p>
       	<div class="row">
-	      	<form class="col s12" name="add" action="CategoryController" method="post">
+	      	<form class="col s12" name="add" action="EmployeeController" method="post">
 	      		<input type="hidden" name="action" value="cadastrar">
 		      	<div class="input-field col s12 left text-left">
-		          <input type="text" placeholder="Id" name="id_edit" class="validate" value="" >
-		          	      		
-		          <input placeholder="Descrição da categoria" id="txtDescription" name="txtDescription" type="text" class="validate">
+		      	
+		          <input type="text" placeholder="Id (Only to edit)" name="id_edit" class="validate" value="" >
+		          <input placeholder="Id Library" id="txtIdLibrary" name="txtIdLibrary" type="text" class="validate">
+		          <input placeholder="Name" id="txtName" name="txtName" type="text" class="validate">
+		          <input placeholder="Address" id="txtAddress" name="txtAddress" type="text" class="validate">
+		          <input placeholder="Phone" id="txtPhone" name="txtPhone" type="text" class="validate">
+		          <input placeholder="Salary" id="txtSalary" name="txtSalary" type="text" class="validate">
 
 			     </div>
 	
@@ -73,14 +77,18 @@
   </ul>
 		
 		<br>
-		<form name="admin" method="post" action="CategoryController">
+		<form name="admin" method="post" action="EmployeeController">
 	  <input type="hidden" name="action" value="">
       <input type="hidden" name="id_obj" value="">
 		<table class="highlight centered">
         <thead>
           <tr>
            	  <th data-field="id">Id</th>
-              <th data-field="id">Title</th>
+              <th data-field="id">Name</th>
+               <th data-field="id">Address</th>
+              <th data-field="id">Phone</th>
+               <th data-field="id">Salary</th>
+                <th data-field="id">Library</th>
               <th data-field="price">Delete</th>
               <th data-field="price">Edit</th>
           </tr>
@@ -88,12 +96,16 @@
          
         <tbody>
         <%
-        List<Category> list = (List<Category>) request.getAttribute("list");
-		for(Category cat: list){        		  
+        List<Employee> list = (List<Employee>) request.getAttribute("list");
+		for(Employee cat: list){        		  
         %>
           <tr>
             <td><input name="" type="text" value="<%=cat.getId() %>" style="width:50px;" disabled></td>
-            <td><%=cat.getDescription() %></td>
+           	<td><%=cat.getName() %></td>
+           	<td><%=cat.getAddress() %></td>
+           	<td><%=cat.getPhone() %></td>
+           	<td><%=cat.getSalary() %></td>
+           	<td><%=cat.getLibrary().getName() %></td>
             <td><i class=" material-icons cursor" onclick="admin.action.value='delete'; admin.id_obj.value='<%=cat.getId()%>'; admin.submit()">delete</i> </td>
             <td><i class=" material-icons cursor" onclick=" add.id_edit.value=<%=cat.getId()%>;">mode_edit</i> </td>
           </tr>

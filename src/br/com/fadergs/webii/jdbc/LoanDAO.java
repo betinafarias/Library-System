@@ -89,8 +89,7 @@ public class LoanDAO {
 		}
 		
 		
-		System.out.println("BOOK ID!!!");
-		System.out.println(loan.getBook().getId());
+
 		//deixar livro disponivel
 		String sqlBook = "UPDATE book SET is_available = ? WHERE id = ?";
 		try {
@@ -104,6 +103,198 @@ public class LoanDAO {
 			ex.printStackTrace();
 		}		
 		
+	}
+	
+	
+	public List<Loan> fetchAllByStudentStatus (Integer status) {
+
+		List<Loan> loans = new ArrayList<Loan>();
+		String sql = "SELECT loan.*, student.name, book.title FROM loan INNER JOIN student ON student.id = loan.id_student INNER JOIN book ON book.id = loan.id_book ORDER BY date_loan DESC";
+		System.out.println(sql);
+		try {
+			PreparedStatement preparador = con.prepareStatement(sql);
+			ResultSet result = preparador.executeQuery();
+			
+			while(result.next()){
+				Loan loan = new Loan();
+				loan.setId(result.getInt("id"));
+				
+
+			    java.sql.Date dbSqlDate = result.getDate("date_loan");
+			    java.util.Date date_loan = new java.util.Date(dbSqlDate.getTime());				
+				loan.setDateLoan(date_loan);		
+				
+			    java.sql.Date exptDate = result.getDate("date_expected");
+			    java.util.Date date_expected = new java.util.Date(exptDate.getTime());				
+				loan.setDateExpected(date_expected);
+				
+			    java.sql.Date devDate = result.getDate("date_devolution");
+			    if(devDate != null) {
+				    java.util.Date date_devolution = new java.util.Date(devDate.getTime());				
+					loan.setDateDevolution(date_devolution);			    	
+			    }
+
+
+				loan.setBook(new Book());
+				loan.getBook().setId(result.getInt("id_book"));
+				loan.getBook().setTitle(result.getString("title"));
+				
+				loan.setStudent(new Student());
+				loan.getStudent().setId(result.getInt("id_student"));
+				loan.getStudent().setName(result.getString("name"));
+				
+				
+				Integer numberOfArrears = 0;
+				
+			    String sqlArrears = " SELECT count(*) as num FROM loan WHERE date_expected < now() AND date_devolution IS NULL AND id_student = ?";
+				
+				try {
+
+					PreparedStatement preparador2 = con.prepareStatement(sqlArrears);
+					preparador2.setInt(1, loan.getStudent().getId());
+					ResultSet resultArrears = preparador2.executeQuery();
+					resultArrears.next();
+					numberOfArrears =  resultArrears.getInt("num");
+					
+					if(numberOfArrears > 0){ //tem atrasos
+						if(status == 0) {
+							loan.getStudent().setIsActive(false);
+							loans.add(loan);
+						}
+					}
+					else{
+						if(status == 1) {
+							loan.getStudent().setIsActive(true);
+							loans.add(loan);
+						}
+						
+					}
+					
+					preparador2.close();
+					
+				} catch (SQLException ex){
+					ex.printStackTrace();
+				}				
+				
+
+				
+				
+			}
+			
+			preparador.close();
+			
+		} catch (SQLException ex){
+			ex.printStackTrace();
+		}
+		
+		return loans;
+	}	
+	
+	
+	public List<Loan> fetchAllByLastMonth () {
+		
+		List<Loan> loans = new ArrayList<Loan>();
+		String sql = "SELECT loan.*, student.name, book.title FROM loan INNER JOIN student ON student.id = loan.id_student INNER JOIN book ON book.id = loan.id_book where loan.date_loan >  CURRENT_DATE - INTERVAL '1 months' ORDER BY date_loan DESC";
+		System.out.println(sql);
+		try {
+			PreparedStatement preparador = con.prepareStatement(sql);
+
+			ResultSet result = preparador.executeQuery();
+			
+			while(result.next()){
+				Loan loan = new Loan();
+				loan.setId(result.getInt("id"));
+				
+
+			    java.sql.Date dbSqlDate = result.getDate("date_loan");
+			    java.util.Date date_loan = new java.util.Date(dbSqlDate.getTime());				
+				loan.setDateLoan(date_loan);		
+				
+			    java.sql.Date exptDate = result.getDate("date_expected");
+			    java.util.Date date_expected = new java.util.Date(exptDate.getTime());				
+				loan.setDateExpected(date_expected);
+				
+			    java.sql.Date devDate = result.getDate("date_devolution");
+			    if(devDate != null) {
+				    java.util.Date date_devolution = new java.util.Date(devDate.getTime());				
+					loan.setDateDevolution(date_devolution);			    	
+			    }
+
+
+
+				loan.setStudent(new Student());
+				loan.getStudent().setId(result.getInt("id_student"));
+				loan.getStudent().setName(result.getString("name"));
+				
+				loan.setBook(new Book());
+				loan.getBook().setId(result.getInt("id_book"));
+				loan.getBook().setTitle(result.getString("title"));
+				
+				loans.add(loan);
+			}
+			
+			preparador.close();
+			
+		} catch (SQLException ex){
+			ex.printStackTrace();
+		}
+		
+		return loans;
+	}
+	
+	
+	public List<Loan> fetchAllByBook (Integer bookId) {
+		
+		System.out.println("BOOK ID filtro!!!");
+		System.out.println(bookId);
+		
+		List<Loan> loans = new ArrayList<Loan>();
+		String sql = "SELECT loan.*, student.name, book.title FROM loan INNER JOIN student ON student.id = loan.id_student INNER JOIN book ON book.id = loan.id_book WHERE loan.id_book = ? ORDER BY date_loan DESC";
+		System.out.println(sql);
+		try {
+			PreparedStatement preparador = con.prepareStatement(sql);
+			preparador.setInt(1, bookId);
+			ResultSet result = preparador.executeQuery();
+			
+			while(result.next()){
+				Loan loan = new Loan();
+				loan.setId(result.getInt("id"));
+				
+
+			    java.sql.Date dbSqlDate = result.getDate("date_loan");
+			    java.util.Date date_loan = new java.util.Date(dbSqlDate.getTime());				
+				loan.setDateLoan(date_loan);		
+				
+			    java.sql.Date exptDate = result.getDate("date_expected");
+			    java.util.Date date_expected = new java.util.Date(exptDate.getTime());				
+				loan.setDateExpected(date_expected);
+				
+			    java.sql.Date devDate = result.getDate("date_devolution");
+			    if(devDate != null) {
+				    java.util.Date date_devolution = new java.util.Date(devDate.getTime());				
+					loan.setDateDevolution(date_devolution);			    	
+			    }
+
+
+
+				loan.setStudent(new Student());
+				loan.getStudent().setId(result.getInt("id_student"));
+				loan.getStudent().setName(result.getString("name"));
+				
+				loan.setBook(new Book());
+				loan.getBook().setId(result.getInt("id_book"));
+				loan.getBook().setTitle(result.getString("title"));
+				
+				loans.add(loan);
+			}
+			
+			preparador.close();
+			
+		} catch (SQLException ex){
+			ex.printStackTrace();
+		}
+		
+		return loans;
 	}
 		
 	public List<Loan> fetchAll () {

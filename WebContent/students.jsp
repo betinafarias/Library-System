@@ -33,12 +33,12 @@
 	  <div class="nav-wrapper light-blue">
 	    <a href="#!" class="brand-logo">Library System</a>
 	    <ul class="right hide-on-med-and-down light-blue">
-	      <li><a href="index.jsp">Loans</a></li>
-	      <li><a href="books.jsp">Books</a></li>
-	      <li ><a href="categories.jsp">Categories</a></li>
-	      <li><a href="students.jsp">Students</a></li>
-	      <li><a href="employees.jsp">Employees</a></li>
-	      <li class="active"><a href="library.jsp">Library</a></li>
+	      <li><a href="LoanController">Loans</a></li>
+	      <li ><a href="BookController">Books</a></li>
+	      <li ><a href="CategoryController">Categories</a></li>
+	      <li class="active"><a href="StudentController">Students</a></li>
+	      <li><a href="EmployeeController">Employees</a></li>
+	      <li><a href="LibraryController">Library</a></li>
 	    </ul>
 	  </div>
 	</nav>

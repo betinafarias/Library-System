@@ -3,7 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="br.com.fadergs.webii.entidades.Book" %>
 <%@ page import="br.com.fadergs.webii.entidades.Loan" %>
-<%@ page import="br.com.fadergs.webii.entidades.Category" %>
+<%@ page import="br.com.fadergs.webii.entidades.Student" %>
 <%@ page import="br.com.fadergs.webii.entidades.Library" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,12 +36,12 @@
 	  <div class="nav-wrapper light-blue">
 	    <a href="#!" class="brand-logo">Library System</a>
 	    <ul class="right hide-on-med-and-down light-blue">
-	      <li><a href="/LoanController">Loans</a></li>
-	      <li class="active"><a href="/BookController">Books</a></li>
-	      <li ><a href="/CategoryController">Categories</a></li>
-	      <li><a href="students.jsp">Students</a></li>
-	      <li><a href="employees.jsp">Employees</a></li>
-	      <li><a href="/LibraryController">Library</a></li>
+	      <li class="active"><a href="LoanController">Loans</a></li>
+	      <li ><a href="BookController">Books</a></li>
+	      <li ><a href="CategoryController">Categories</a></li>
+	      <li ><a href="StudentController">Students</a></li>
+	      <li><a href="EmployeeController">Employees</a></li>
+	      <li><a href="LibraryController">Library</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -61,20 +61,39 @@
 	      	<form class="col s12" name="add" action="LoanController" method="post">
 	      		<input type="hidden" name="action" value="cadastrar">
 		      	<div class="input-field col s12 left text-left">		        
-		      	
-		      	  <label>Browser Select</label>
-				  <select class="browser-default">
-				    <option value="" disabled selected>Choose your option</option>
-				    <option value="1">Option 1</option>
-				    <option value="2">Option 2</option>
-				    <option value="3">Option 3</option>
+				  <select class="browser-default"  id="txtIdStudent" name="txtIdStudent" required >
+				    <option value="" disabled selected>Active students</option>
+			        <%
+			        List<Student> students = (List<Student>) request.getAttribute("students");
+					for(Student obj: students){     
+						if(obj.getIsActive()) {
+					     %>
+				        	<option value="<%=obj.getId()%>"><%=obj.getName() %></option>
+				        <%
+						}
+					}
+			        %>
+				    
 				  </select>
+		      	<br>
 		      	
-		      	       				               		
-		          <input placeholder="Id Student" id="txtIdStudent" name="txtIdStudent" type="text" class="validate" required>
-		          <input placeholder="Id Book" id="txtIdBook" name="txtIdBook" type="text" class="validate" required>
+				  <select class="browser-default"  id="txtIdBook" name="txtIdBook" required >
+				    <option value="" disabled selected>Available books</option>
+			        <%
+			        List<Book> books = (List<Book>) request.getAttribute("books");
+					for(Book obj: books){     
+						if(obj.getIsAvailable()) {
+					     %>
+				        	<option value="<%=obj.getId()%>"><%=obj.getTitle() %></option>
+				        <%
+						}
+					}
+			        %>
+				    
+				  </select>		      	
+		      	       				               	
 			     </div>
-	
+	<br><br>
 			     <a class="waves-effect waves-light btn light-blue" onclick="add.submit();"><i class="material-icons left">check</i>Salvar</a>
 	      	</form>
       	</div>
@@ -84,6 +103,43 @@
   </ul>
 		
 		<br>
+		<br>
+		<h6>Filter loan by book</h6>
+	 <form name="filterBook" method="get" action="LoanController" >
+	  <select class="browser-default"  id="filter_id_book" name="filter_id_book" required onchange="filterBook.submit()">
+	    <option value="" disabled selected>Filter by book</option>
+        <%
+        List<Book> allBooks = (List<Book>) request.getAttribute("books");
+		for(Book obj: allBooks){     
+		     %>
+	        	<option value="<%=obj.getId()%>"><%=obj.getTitle() %></option>
+	        <%
+		}
+        %>
+	    
+	  </select>		 
+	 </form>
+	 
+	<h6>Filter loan by student status</h6>
+	 <form name="filterStudent" method="get" action="LoanController" >
+	  <select class="browser-default"  id="filter_status_student" name="filter_status_student" required onchange="filterStudent.submit()">
+	    <option value="" disabled selected>Status</option>
+	    <option value="1" >Active</option>
+	    <option value="0">Inactive</option>
+	  </select>		 
+	 </form>	 
+	
+	<h6>Filter loan by period</h6>
+	 <form name="filterPeriod" method="get" action="LoanController">
+	  <select class="browser-default"  id="filter_period" name="filter_period" required onchange="filterPeriod.submit()">
+	  <option value="" disabled selected>Period</option>
+	    <option value="month">Last month</option>
+	  </select>		 
+	 </form>	
+	  
+	  <br><br>
+		
+		
 		<form name="admin" method="post" action="LoanController">
 	  <input type="hidden" name="action" value="devolution">
       <input type="hidden" name="id_obj" value="">
@@ -122,6 +178,8 @@
          %>
         </tbody>
       </table>
+      <br>
+      <b>TOTAL: <%=list.size() %></b>
 
       </form>
 		

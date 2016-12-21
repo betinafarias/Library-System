@@ -6,7 +6,7 @@ public class Employee {
 	private String address;
 	private Integer phone;
 	private double salary;
-	private Integer idLibrary;
+	private Library library;
 	public Integer getId() {
 		return id;
 	}
@@ -37,10 +37,11 @@ public class Employee {
 	public void setSalary(double salary) {
 		this.salary = salary;
 	}
-	public Integer getIdLibrary() {
-		return idLibrary;
+
+	public Library getLibrary() {
+		return library;
 	}
-	public void setIdLibrary(Integer idLibrary) {
-		this.idLibrary = idLibrary;
+	public void setLibrary(Library library) {
+		this.library = library;
 	}
 }

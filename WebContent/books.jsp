@@ -36,12 +36,12 @@
 	  <div class="nav-wrapper light-blue">
 	    <a href="#!" class="brand-logo">Library System</a>
 	    <ul class="right hide-on-med-and-down light-blue">
-	      <li><a href="/LoanController">Loans</a></li>
-	      <li class="active"><a href="/BookController">Books</a></li>
-	      <li ><a href="/CategoryController">Categories</a></li>
-	      <li><a href="students.jsp">Students</a></li>
-	      <li><a href="employees.jsp">Employees</a></li>
-	      <li><a href="/LibraryController">Library</a></li>
+	      <li><a href="LoanController">Loans</a></li>
+	      <li class="active"><a href="BookController">Books</a></li>
+	      <li ><a href="CategoryController">Categories</a></li>
+	      <li><a href="StudentController">Students</a></li>
+	      <li><a href="EmployeeController">Employees</a></li>
+	      <li><a href="LibraryController">Library</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -101,7 +101,12 @@
 
         <%
         List<Book> list = (List<Book>) request.getAttribute("list");
-		for(Book obj: list){        		  
+		for(Book obj: list){        	
+			String active = "<span class='red-text'>Unavailable</span><br>Devolution( " + obj.getLoan().convertDateToString(obj.getLoan().getDateExpected()) + " )";
+			if(obj.getIsAvailable()) {
+				active = "<a href='LoanController'>Get Loan</a>";
+			}
+			
         %>
           <tr>
             <td><input name="" type="text" value="<%=obj.getId() %>" style="width:50px;" disabled></td>
@@ -110,7 +115,7 @@
              <td>R$ <%=String.valueOf(obj.getPrice()) %></td>
              <td><%=obj.getCategory().getDescription() %></td>
              <td><%=obj.getLibrary().getName() %></td>
-             <td><%=obj.getIsAvailable() %></td>
+             <td><%=active %></td>
             <td><i class=" material-icons cursor" onclick=" add.id_edit.value=<%=obj.getId()%>;">mode_edit</i> </td>
           </tr>
          <%
